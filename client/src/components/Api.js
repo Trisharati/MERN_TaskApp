@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = 'http://localhost:1200/api'
+const url = 'https://mern-task-application-c5jw.onrender.com/api'
 
 export const addtask = (formData)=>axios.post(`${url}/addtask`,formData)
 .then((res)=>{
