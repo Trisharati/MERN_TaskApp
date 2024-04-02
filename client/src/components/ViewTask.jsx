@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { deleteTask, viewTask } from '../redux/TaskSlice'
 import { Link,useNavigate } from 'react-router-dom'
-
+import { ClipLoader } from "react-spinners";
 
 
 const ViewTask = () => {
@@ -15,11 +15,15 @@ const ViewTask = () => {
         allotedTo:'',
         _id:''
     }])
-
+    const [isLoading, setIsLoading] = useState(false);
     
 
     const getData = async()=>{
+      setIsLoading(true)
     let res = await dispatch(viewTask())
+    if(res.payload){
+      setIsLoading(false)
+    }
     return setTaskData(res.payload)
     }
     useEffect(()=>{
@@ -36,6 +40,13 @@ const ViewTask = () => {
 
   return (
     <div>
+    {isLoading ? (
+        <div style={{ position: "relative", top: "10%", left: "45%" }}>
+          <p style={{ fontSize: 20, color: "#AE0000" }}>Loading...</p>
+          <ClipLoader color={"#123abc"} loading={isLoading} size={100} />
+        </div>
+      ) :
+      <>
       <div className='linkstyle'>
       <Link to='/'><b>Go to Form</b></Link>
       </div>
@@ -56,7 +67,7 @@ const ViewTask = () => {
     
         const {status,title,allotedTo,description,_id} = res
         return (
-        <tr>
+        <tr key={idx}>
         <th scope="row">{idx+1}</th>
         <td>{title}</td>
         <td>{allotedTo}</td>
@@ -72,6 +83,8 @@ const ViewTask = () => {
     })}
     </tbody>
    </table>
+   <div className='mt-5'></div>
+   </>}
     </div>
   )
 }
